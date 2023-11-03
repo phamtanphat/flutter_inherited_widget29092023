@@ -52,12 +52,28 @@ class _OngbaState extends State<Ongba> {
              number = Random().nextInt(1000);
            });
         }, child: Text("Random number")),
-        widget.child
+        MyInherittedWidget(
+          number: number,
+          child: widget.child,
+        )
       ],
     );
   }
 }
 
+class MyInherittedWidget extends InheritedWidget {
+  int number;
+  MyInherittedWidget({required super.child, required this.number});
+
+  static MyInherittedWidget? of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType();
+  }
+
+  @override
+  bool updateShouldNotify(MyInherittedWidget oldWidget) {
+    return oldWidget.number != number;
+  }
+}
 
 class Chame extends StatefulWidget {
   Widget child;
@@ -70,11 +86,12 @@ class Chame extends StatefulWidget {
 class _ChameState extends State<Chame> {
   @override
   Widget build(BuildContext context) {
+    var number = MyInherittedWidget.of(context)?.number ?? 0;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text("Cha me widget"),
+        Text("Cha me widget $number"),
         widget.child
       ],
     );
@@ -82,7 +99,6 @@ class _ChameState extends State<Chame> {
 }
 
 class Concai extends StatefulWidget {
-  const Concai({super.key});
 
   @override
   State<Concai> createState() => _ConcaiState();
@@ -91,6 +107,7 @@ class Concai extends StatefulWidget {
 class _ConcaiState extends State<Concai> {
   @override
   Widget build(BuildContext context) {
+    print("Con cai widget");
     return Container(
       child: Text("Con cai widget"),
     );
