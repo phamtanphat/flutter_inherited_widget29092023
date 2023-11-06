@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 void main() {
@@ -14,7 +15,10 @@ void main() {
   //     .then((total4) => print(total4))
   //     .catchError((error) => print(error.toString()));
 
-  calculator(3, 2)
+  // calculator(3, 2)
+  //     .then((value) => print(value));
+
+  requestApi()
       .then((value) => print(value));
 }
 
@@ -25,15 +29,31 @@ void main() {
 // Future<int> minus(int a, int b) {
 //   return Future.delayed(Duration(seconds: 1), () => a - b);
 // }
+//
+// Future<int> calculator(int a, int b) async {
+//   try {
+//     var value1 = await Future.delayed(Duration(seconds: 2), () {
+//       throw Exception("Null")
+//     });
+//
+//     var value2 = await Future.delayed(Duration(seconds: 1), () {
+//       return a + b * 2;
+//     });
+//
+//     return value1 + value2;
+//   } catch(e) {
+//     return Future.value(0);
+//   }
+// }
 
-Future<int> calculator(int a, int b) async {
-  var value1 = await Future.delayed(Duration(seconds: 2), () {
-    return a + b;
+Future requestApi() {
+  Completer<int> completer = Completer();
+  Future.delayed(Duration(seconds: 3), () {
+    var a = 5;
+    Future.delayed(Duration(seconds: 2), () {
+      completer.complete(a + 2);
+    });
   });
 
-  var value2 = await Future.delayed(Duration(seconds: 1), () {
-    return a + b * 2;
-  });
-
-  return value1 + value2;
+  return completer.future;
 }
